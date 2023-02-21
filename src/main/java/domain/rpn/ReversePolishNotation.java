@@ -11,6 +11,7 @@ public class ReversePolishNotation {
         if (expression.isEmpty()) {
             return "Entered empty expression";
         }
+
         String[] elem = Converter.convertExprToCorrectFormat(expression);
         Stack<String> numberStack = new Stack<>();
         Stack<Enum> signStack = new Stack<>();

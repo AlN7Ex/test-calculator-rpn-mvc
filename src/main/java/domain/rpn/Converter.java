@@ -6,7 +6,8 @@ import java.util.stream.Collectors;
 
 public class Converter {
     public static String[] convertExprToCorrectFormat(String expression) {
-        String[] tempStr = expression.split("");
+        String trim = expression.replaceAll("\\s", "");
+        String[] tempStr = trim.split("");
         StringBuilder stringBuilder = new StringBuilder();
         List<String> arrStr = Arrays.stream(tempStr).collect(Collectors.toList());
         stringBuilder.append(arrStr.get(0));

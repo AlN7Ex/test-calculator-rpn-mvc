@@ -16,9 +16,9 @@
     <label>
         <input
                 type="text"
-                size="40"
+                size="25"
                 name="expression"
-                placeholder="Enter expression with space between symbols">
+                placeholder="Enter expression">
     </label>
     <p>
         <input
