@@ -24,7 +24,6 @@
         <input
                 type="submit"
                 name="submit"
-                size="25"
                 value="Enter">
     </p>
 

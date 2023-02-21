@@ -1,4 +1,4 @@
-package domain;
+package domain.rpn;
 
 import org.springframework.stereotype.Component;
 
@@ -11,16 +11,11 @@ public class ReversePolishNotation {
         if (expression.isEmpty()) {
             return "Пустая строка";
         }
-        String[] elem = expression.split(" ");
+        String[] elem = Converter.convertExprToCorrectFormat(expression);
         Stack<String> numberStack = new Stack<>();
         Stack<Enum> signStack = new Stack<>();
 
         for (int i = 0; i < elem.length; i++) {
-            int i1 = Integer.parseInt(elem[elem.length - 1]);
-            if (i1 == -1) {
-                throw new IllegalArgumentException("Last symbol isn't digit: " + elem[elem.length - 1]);
-            }
-
             if (!elem[i].equals("+")
                     && !elem[i].equals("-")
                     && !elem[i].equals("*")
@@ -31,47 +26,51 @@ public class ReversePolishNotation {
             } else if (signStack.empty()) {
                 switch (elem[i]) {
                     case "+":
-                        signStack.push(Priority.PLUS);
+                        signStack.push(OperandPriority.PLUS);
                         break;
                     case "-":
-                        signStack.push(Priority.MINUS);
+                        signStack.push(OperandPriority.MINUS);
                         break;
                     case "*":
-                        signStack.push(Priority.MULTIPLICATION);
+                        signStack.push(OperandPriority.MULTIPLICATION);
                         break;
                     case "/":
-                        signStack.push(Priority.DIVISION);
+                        signStack.push(OperandPriority.DIVISION);
                         break;
                 }
             } else {
                 double topNum, bottomNum;
                 String temp;
-                Priority internalSigh, externalSign;
-                internalSigh = (Priority) signStack.peek();
+                OperandPriority internalSigh, externalSign;
+                internalSigh = (OperandPriority) signStack.peek();
                 externalSign = null;
 
-                // Инициализируем текущий знак в выражении
+                // Init current sign in expression
                 switch (elem[i]) {
                     case "+":
-                        externalSign = Priority.PLUS;
+                        externalSign = OperandPriority.PLUS;
                         break;
                     case "-":
-                        externalSign = Priority.MINUS;
+                        externalSign = OperandPriority.MINUS;
                         break;
                     case "*":
-                        externalSign = Priority.MULTIPLICATION;
+                        externalSign = OperandPriority.MULTIPLICATION;
                         break;
                     case "/":
-                        externalSign = Priority.DIVISION;
+                        externalSign = OperandPriority.DIVISION;
                         break;
                 }
-                // Производим вычисления пока у последнего знака в стеке
-                // приоритет меньше вставляемого в стек знака
+                if (externalSign == null) {
+                    return new IllegalArgumentException("Wrong operand").getMessage();
+                }
+
+                // Calculating while external sigh has less priority than internal sign
+
                 while (internalSigh.getPriority() >= externalSign.getPriority()) {
                     if (signStack.empty()) {
                         break;
                     }
-                    internalSigh = (Priority) signStack.pop();
+                    internalSigh = (OperandPriority) signStack.pop();
                     topNum = Double.parseDouble(numberStack.pop());
                     bottomNum = Double.parseDouble(numberStack.pop());
                     switch (internalSigh.getTitle()) {
@@ -100,7 +99,7 @@ public class ReversePolishNotation {
         while (numberStack.size() > 1) {
             topNumber = Double.parseDouble(numberStack.pop());
             bottomNumber = Double.parseDouble(numberStack.pop());
-            Priority sign = (Priority) signStack.pop();
+            OperandPriority sign = (OperandPriority) signStack.pop();
             switch (sign.getTitle()) {
                 case "+":
                     numberStack.push(Double.toString(bottomNumber + topNumber));
@@ -117,28 +116,6 @@ public class ReversePolishNotation {
             }
         }
         return numberStack.pop();
-    }
-}
-enum Priority {
-    PLUS("+", 1),
-    MINUS("+", 1),
-    DIVISION("/", 2),
-    MULTIPLICATION("*", 2);
-
-    private final String title;
-    private final int priority;
-
-    Priority(String title, int priority) {
-        this.title = title;
-        this.priority = priority;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public int getPriority() {
-        return priority;
     }
 }
 
