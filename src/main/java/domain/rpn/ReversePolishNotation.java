@@ -9,7 +9,7 @@ public class ReversePolishNotation {
 
     public static String calculate(String expression) {
         if (expression.isEmpty()) {
-            return "Пустая строка";
+            return "Entered empty expression";
         }
         String[] elem = Converter.convertExprToCorrectFormat(expression);
         Stack<String> numberStack = new Stack<>();
@@ -65,7 +65,6 @@ public class ReversePolishNotation {
                 }
 
                 // Calculating while external sigh has less priority than internal sign
-
                 while (internalSigh.getPriority() >= externalSign.getPriority()) {
                     if (signStack.empty()) {
                         break;
