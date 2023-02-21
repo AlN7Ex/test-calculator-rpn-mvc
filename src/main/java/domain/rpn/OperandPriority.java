@@ -2,7 +2,7 @@ package domain.rpn;
 
 public enum OperandPriority {
     PLUS("+", 1),
-    MINUS("+", 1),
+    MINUS("-", 1),
     DIVISION("/", 2),
     MULTIPLICATION("*", 2);
 
