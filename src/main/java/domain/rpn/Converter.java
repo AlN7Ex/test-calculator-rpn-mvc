@@ -10,8 +10,17 @@ public class Converter {
         String[] tempStr = trim.split("");
         StringBuilder stringBuilder = new StringBuilder();
         List<String> arrStr = Arrays.stream(tempStr).collect(Collectors.toList());
-        stringBuilder.append(arrStr.get(0));
-        for (int i = 1; i < arrStr.size(); ++i) {
+        int initFirstElem = 0;
+        switch (arrStr.get(initFirstElem)) {
+            case "+":
+                initFirstElem++;
+                break;
+            case "*":
+            case "/":
+                throw new RuntimeException("Wrong first input sigh: " + arrStr.get(initFirstElem));
+        }
+        stringBuilder.append(arrStr.get(initFirstElem));
+        for (int i = initFirstElem + 1; i < arrStr.size(); ++i) {
             if ("+-*/".contains(arrStr.get(i))) {
                 stringBuilder.append(" ");
                 stringBuilder.append(arrStr.get(i));

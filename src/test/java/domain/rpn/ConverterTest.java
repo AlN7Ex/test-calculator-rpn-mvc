@@ -30,4 +30,30 @@ public class ConverterTest {
         assertArrayEquals(actual, expected);
     }
 
+    @Test
+    public void convertExprToCorrectFormat4() {
+        String expression = "+2 +2*2+2";
+        String[] actual = Converter.convertExprToCorrectFormat(expression);
+        String[] expected = {"2", "+", "2", "*", "2", "+", "2"};
+        assertArrayEquals(actual, expected);
+    }
+
+    @Test
+    public void convertExprToCorrectFormat5() throws RuntimeException {
+        String expression = "/2 +2*2+2";
+        assertThrows(
+                "Wrong first input sigh: /",
+                RuntimeException.class,
+                () -> Converter.convertExprToCorrectFormat(expression));
+    }
+
+    @Test
+    public void convertExprToCorrectFormat6() throws RuntimeException {
+        String expression = "*2 +2*2+2";
+        assertThrows(
+                "Wrong first input sigh: *",
+                RuntimeException.class,
+                () -> Converter.convertExprToCorrectFormat(expression));
+    }
+
 }
